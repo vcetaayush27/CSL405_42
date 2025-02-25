@@ -1,0 +1,336 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyN4vmFJdh+k8nn/hsoHaail",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/vcetaayush27/CSL405_42/blob/main/exp%206\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# **SE 42 Aayush Patil**"
+      ],
+      "metadata": {
+        "id": "tobwqhqyZQUO"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### **Importing**"
+      ],
+      "metadata": {
+        "id": "8Zt3met-Med2"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import sqlite3"
+      ],
+      "metadata": {
+        "id": "FiN591WWMlQO"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### **Connecting to Database**"
+      ],
+      "metadata": {
+        "id": "PqMxmh8LMvL-"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "connection = sqlite3.connect ('./genericDatabase.db')\n",
+        "cursor = connection.cursor ()"
+      ],
+      "metadata": {
+        "id": "K0GGLFRFM622"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## **Create Table**"
+      ],
+      "metadata": {
+        "id": "RRKzk0JNNCWe"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "cursor.execute('''\n",
+        "    CREATE TABLE IF NOT EXISTS students (\n",
+        "        id INTEGER PRIMARY KEY AUTOINCREMENT,\n",
+        "        name TEXT NOT NULL,\n",
+        "        age INTEGER NOT NULL\n",
+        "    )\n",
+        "''')\n",
+        "\n",
+        "connection.commit()"
+      ],
+      "metadata": {
+        "id": "ubVf6MYcNbYu"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### **CRUD OPREATIONS**"
+      ],
+      "metadata": {
+        "id": "IVk3s8e0Nd_O"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## **Create Insertions**"
+      ],
+      "metadata": {
+        "id": "u231UhQSNpgF"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def create_student(name, age):\n",
+        "    cursor.execute('''\n",
+        "        INSERT INTO students (name, age)\n",
+        "        VALUES (?, ?)\n",
+        "    ''', (name, age))\n",
+        "    connection.commit()\n",
+        "    print(\"Record added successfully!\")\n",
+        "\n",
+        "create_student(\"Griffith\", 20)\n",
+        "create_student(\"Guts\", 22)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "zHPgNF37NcQN",
+        "outputId": "433a21f9-a870-4786-bfd2-4652dc3016dd"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Record added successfully!\n",
+            "Record added successfully!\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Read (Retrive)"
+      ],
+      "metadata": {
+        "id": "-105x16DN4re"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def read_students():\n",
+        "    cursor.execute('SELECT * FROM students')\n",
+        "    rows = cursor.fetchall()\n",
+        "    print(\"Student Records:\")\n",
+        "    for row in rows:\n",
+        "        print(row)\n",
+        "\n",
+        "read_students()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "8ONIeVp4N1B-",
+        "outputId": "318b2c1d-8526-4e6c-903b-c61982cbe9f6"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Student Records:\n",
+            "(1, 'Griffith', 21)\n",
+            "(3, 'Griffith', 20)\n",
+            "(5, 'Griffith', 20)\n",
+            "(6, 'Guts', 22)\n",
+            "(7, 'Griffith', 20)\n",
+            "(8, 'Guts', 22)\n",
+            "(9, 'Griffith', 20)\n",
+            "(10, 'Guts', 22)\n",
+            "(11, 'Griffith', 20)\n",
+            "(12, 'Guts', 22)\n",
+            "(13, 'Griffith', 20)\n",
+            "(14, 'Guts', 22)\n",
+            "(15, 'Griffith', 20)\n",
+            "(16, 'Guts', 22)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Update"
+      ],
+      "metadata": {
+        "id": "lF8gm5deOCw2"
+      }
+    },
+    {
+      "source": [
+        "def update_student_age(student_id, new_age):\n",
+        "    if connection: # Check if the connection is still active\n",
+        "        cursor.execute('''\n",
+        "            UPDATE students\n",
+        "            SET age = ?\n",
+        "            WHERE id = ?\n",
+        "        ''', (new_age, student_id))\n",
+        "        connection.commit()\n",
+        "        print(\"Student age updated successfully!\")\n",
+        "    else:\n",
+        "        print(\"Database connection is closed.\")\n",
+        "\n",
+        "update_student_age(1, 21)  # Updating Alice's age to 21"
+      ],
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "FEAsCqfQSr6G",
+        "outputId": "c78e63a2-bcef-4f4d-db5e-38c252e6c88c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Student age updated successfully!\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Delete"
+      ],
+      "metadata": {
+        "id": "ro5cNmyXOJgH"
+      }
+    },
+    {
+      "source": [
+        "def delete_student(student_id):\n",
+        "    cursor.execute('DELETE FROM students WHERE id = ?', (student_id,))\n",
+        "    connection.commit()\n",
+        "    print(\"Student deleted successfully!\")\n",
+        "\n",
+        "delete_student(4)\n",
+        "delete_student(8)\n",
+        "delete_student(10)\n",
+        "delete_student(13)\n",
+        "delete_student(14)\n",
+        "delete_student(15)\n",
+        "delete_student(16)\n",
+        "delete_student(7)\n",
+        "\n",
+        "read_students()"
+      ],
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 0
+        },
+        "id": "pMD5PKBlQqE-",
+        "outputId": "dadba0b9-0fbe-47a7-e8c2-0d40405c87bf"
+      },
+      "execution_count": 93,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Student deleted successfully!\n",
+            "Student deleted successfully!\n",
+            "Student deleted successfully!\n",
+            "Student deleted successfully!\n",
+            "Student deleted successfully!\n",
+            "Student deleted successfully!\n",
+            "Student deleted successfully!\n",
+            "Student deleted successfully!\n",
+            "Student Records:\n",
+            "(1, 'Griffith', 21)\n",
+            "(3, 'Griffith', 20)\n",
+            "(6, 'Guts', 22)\n",
+            "(9, 'Griffith', 20)\n",
+            "(11, 'Griffith', 20)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Closing the Database Connection"
+      ],
+      "metadata": {
+        "id": "EWYMd566OSie"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "connection.close()"
+      ],
+      "metadata": {
+        "id": "mQKX8h3qUmJt"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
